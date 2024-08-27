@@ -1,0 +1,35 @@
+BasedOnStyle: Microsoft
+Language: Cpp
+DerivePointerAlignment: false
+PointerAlignment: Left
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: true
+  AfterObjCDeclaration: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+MaxEmptyLinesToKeep: 2
+ReflowComments: false
+SortIncludes: false
+SortUsingDeclarations: Never
+UseTab: Always
+SpaceInEmptyParentheses: false
+SpaceAfterCStyleCast: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatementsExceptForEachMacros
+SpaceBeforeRangeBasedForLoopColon: true
+SeparateDefinitionBlocks: Always
+QualifierAlignment: Left
