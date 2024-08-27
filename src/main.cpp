@@ -5,11 +5,14 @@
 int main(int argc, char** argv) {
 	std::string filepath;
 	if (argc == 1) {
-		std::cout << "Enter filename: ";
+		std::cout << "Enter filename (or just press enter): ";
 		getline(std::cin, filepath);
 	}
-	filepath = RESOURCES_PATH + filepath;
-	editorStart(filepath.c_str());
-
+	filepath = filepath;
+	if (filepath.empty()) {
+		editorStart(nullptr);
+	} else {
+		editorStart(filepath.c_str());
+	}
 	return 0;
 }

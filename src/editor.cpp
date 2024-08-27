@@ -743,13 +743,13 @@ char* editorPrompt(const char* prompt, void (*callback)(char*, int)) {
 		if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
 			if (buflen != 0)
 				buf[--buflen] = '\0';
-		} else if (c == '\x1b') {
+		} else if (c == '\x1b' || c == CTRL_KEY('q')) {
 			editorSetStatusMessage("");
 			if (callback)
 				callback(buf, c);
 			free(buf);
 			return NULL;
-		} else if (c == '\r') {
+		} else if (c == '\r' || c == '\n') {
 			if (buflen != 0) {
 				editorSetStatusMessage("");
 				if (callback)
@@ -914,26 +914,24 @@ void initEditor() {
 
 void editorStart(const char* filenameIn) {
 	initEditor();
-
 	if (enableRawMode() != 0) {
 		return;
 	}
 
-	updateWindowSize();
-
-	// to convert from const to non const, a.k.a making a copy
-	if (!editorOpen(filenameIn)) {
-		editorSetStatusMessage("%s", "File cannot exist, Press any key to exit");
-		editorRefreshScreen();
-		readKey();
-		disableRawMode();
-		return;
+	if (filenameIn != nullptr) {
+		// to convert from const to non const, a.k.a making a copy
+		if (!editorOpen(filenameIn)) {
+			editorSetStatusMessage("%s", "File cannot exist, Press any key to exit");
+			editorRefreshScreen();
+			readKey();
+			disableRawMode();
+			return;
+		}
 	}
 
-
+	editorSetStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
 	editorRefreshScreen();
 	while (true) {
-
 		int key = readKey();
 		if (editorProcessKeypress(key)) {
 			break;
@@ -941,11 +939,13 @@ void editorStart(const char* filenameIn) {
 		editorRefreshScreen();
 	}
 
+
 	for (int i = 0; i < E.numrows; i++) {
 		editorFreeRow(&E.row[i]);
 	}
 	if (E.filename)
 		free(E.filename);
+
 
 	disableRawMode();
 }

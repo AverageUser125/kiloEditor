@@ -23,12 +23,7 @@ if(POLICY CMP0069)
     cmake_policy(SET CMP0069 NEW)
 endif()
 
-# /Zi and /GL are incompatible, so here
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
-else()
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)	
-endif()
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION PRODUCTION_BUILD)	
 
 # address sanitizer, incompatible with gdb
 # add_compile_options(/ZI-)
@@ -36,11 +31,7 @@ endif()
 # add_compile_options(-fsanitize=address)
 
 if(MSVC)
-    # Set MSVC runtime library
-    # Enable SIMD optimizations, Show all warnings, (except contexpr)
     add_compile_options(/arch:AVX2 /W4 /EHsc)
-    # Disable CRT secure warnings
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
 # Enable Hot Reload for MSVC compilers if supported, came with the default file
@@ -74,6 +65,9 @@ else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC PRODUCTION_BUILD=0) 
 endif()
 
+if(MSVC) # If using the VS compiler...
+	target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC _CRT_SECURE_NO_WARNINGS)
+endif()
 # add .h and .hpp files
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
